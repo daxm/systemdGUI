@@ -3,11 +3,11 @@
 from flask import Flask, render_template, request, url_for
 import logging
 
-from helper import get_units
+import helper
 
 app = Flask(__name__)
 title = "systemd GUI"
-HOST = '0.0.0.0'  # String: Flask server IP/DNS.
+HOST = 'localhost'  # String: Flask server IP/DNS.
 PORT = 7890  # Int: Port to run Flask on.
 FLASK_DEBUG = 1  # Int: 0 or 1
 LOGGING_LEVEL = 'DEBUG'
@@ -15,10 +15,20 @@ LOGGING_LEVEL = 'DEBUG'
 
 @app.route("/")
 def index():
-    # Get a list of registered Units
-    systemctl_units = get_units()
+    return render_template('index.htm', title=title)
 
-    return render_template('index.htm', title=title, systemd_units=systemctl_units)
+
+@app.route("/systemctl/list-unit-files")
+def _systemctl_list_unit_files():
+    # Get a list of registered Units
+    systemctl_units = helper.systemctl_list_unit_files()
+    return render_template('list_unit_files.htm', title=title, systemd_units=systemctl_units)
+
+
+@app.route("/daxm")
+def _daxm():
+    help_output = helper.systemctl_help_output()
+    return render_template('daxm.htm', help_output=help_output)
 
 
 @app.route("/<path:path>")
