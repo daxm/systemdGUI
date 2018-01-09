@@ -1,22 +1,14 @@
 # Value section (think headers for columns of data in a spreadsheet)
-# Value Filldown first_section (\S+\s.*$)
-# Value Filldown remaining_sections (\S+\s\S+:)
-Value shortcode (-\w)
+Value shortcode (-\S)
 Value longcode (--\S+)
-Value description (\S+\s.*$)
-Value command (\S+)
+Value command (\S+(\s(?!Sets)\S+)*)
+Value description (.*)
+Value Filldown section ((\S+\s)*Commands:)
 
 # State
 Start
-  ^\s{2}${shortcode}\s+${longcode}\s+${description} -> Record Start
+  ^${section}
+  ^\s{2}${shortcode}\s+${longcode}(\s)*(${description}) -> Record
+  ^\s{5}${longcode}(\s)*(${description}) -> Record
+  ^\s{2}${command}(\s)*(${description}) -> Record
 
-# Remaining_Sections
-#  ^${remaining_sections}
-#  ^\n -> Record REremaining_sections
-
-# State Transition
-# REfirst_section
-#  ^\s+${shortcode}\s+${longcode}\s+${description} -> Start
-
-# REremaining_sections
-#  ^\s\s${command}\s\s+${description} -> Remaining_Sections

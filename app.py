@@ -9,7 +9,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.htm', title=title)
+    systemctl_help = helper.systemctl_help_output()
+    return render_template('index.htm', title=title, systemctl_help=systemctl_help)
 
 
 @app.route("/systemctl/list-unit-files")
@@ -22,7 +23,7 @@ def _systemctl_list_unit_files():
 @app.route("/daxm")
 def _daxm():
     help_output = helper.systemctl_help_output()
-    return render_template('daxm.htm', help_output=help_output)
+    return render_template('daxm.htm', title=title, help_output=help_output)
 
 
 @app.route("/<path:path>")

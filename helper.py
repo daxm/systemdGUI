@@ -36,6 +36,8 @@ def systemctl_help_output():
         re_table = textfsm.TextFSM(template)
 
     help_output = re_table.ParseText(text=result)
+    # logging.DEBUG(help_output)
+    print(help_output)
 
     """
     I think this list should be formatted like this:

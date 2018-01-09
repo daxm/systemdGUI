@@ -5,7 +5,7 @@
     </header>
 
     <div id="mainbody">
-        <div class="daxm mdl-card mdl-cell--6-col mdl-shadow--2dp">
+        <div class="daxm mdl-card mdl-cell--12-col mdl-shadow--2dp">
              <div class="mdl-card__title">
                  <h2 class="mdl-card__title-text">
                      systemctl commands
@@ -14,105 +14,24 @@
             <div class="mdl-card__actions mdl-card--border">
                 <table>
                     <thead>
-                        <tr>
-                            <td><b>Command</b></td>
-                            <td><b>Description</b></td>
-                        </tr>
+                        <tr><td><b>Command</b></td><td><b>Description</b></td></tr>
                     </thead>
-                    <tbody>
+                    {% for result in systemctl_help %}
                         <tr>
-                            <td>list-units</td>
-                            <td>List units currently in memory</td>
+                            <td nowrap="True">
+                                {% if result[0] != '' %}
+                                    {{ result[0] }} or {{ result[1] }}
+                                {% elif result[1] != '' %}
+                                    {{ result[1] }}
+                                {% else %}
+                                    {{ result[2] }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ result[3] }}
+                            </td>
                         </tr>
-                        <tr>
-                            <td>list-sockets</td>
-                            <td>List socket units currently in memory, ordered by address</td>
-                        </tr>
-                        <tr>
-                            <td>list-timers</td>
-                            <td>List timer units currently in memory, ordered by next elapse</td>
-                        </tr>
-                        <tr>
-                            <td><a href="/systemctl/list-unit-files">list-unit-files</a></td>
-                            <td>List installed unit files</td>
-                        </tr>
-                        <tr>
-                            <td>preset-all</td>
-                            <td>Enable/disable all unit files based on preset configuration</td>
-                        </tr>
-                        <tr>
-                            <td>get-default</td>
-                            <td>Get the name of the default target</td>
-                        </tr>
-                        <tr>
-                            <td>show-environment</td>
-                            <td>Dump environment</td>
-                        </tr>
-                        <tr>
-                            <td>daemon-reload</td>
-                            <td>Reload systemd manager configuration</td>
-                        </tr>
-                        <tr>
-                            <td>daemon-reexec</td>
-                            <td>Reexecute systemd manager</td>
-                        </tr>
-                        <tr>
-                            <td>is-system-running</td>
-                            <td>Check whether system is fully running</td>
-                        </tr>
-                        <tr>
-                            <td>default</td>
-                            <td>Enter system default mode</td>
-                        </tr>
-                        <tr>
-                            <td>rescue</td>
-                            <td>Enter system rescue mode</td>
-                        </tr>
-                        <tr>
-                            <td>emergency</td>
-                            <td>Enter system emergency mode</td>
-                        </tr>
-                        <tr>
-                            <td>halt</td>
-                            <td>Shut down and halt the system</td>
-                        </tr>
-                        <tr>
-                            <td>poweroff</td>
-                            <td>Shut down and power-off the system</td>
-                        </tr>
-                        <tr>
-                            <td>reboot</td>
-                            <td>Shut down and reboot the system</td>
-                        </tr>
-                        <tr>
-                            <td>kexec</td>
-                            <td>Shut down and reboot the system with kexec</td>
-                        </tr>
-                        <tr>
-                            <td>exit</td>
-                            <td>Request user instance or container exit</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>switch-root ROOT</td>
-                            <td>Change to a different root file system</td>
-                        </tr>
-                        <tr>
-                            <td>suspend</td>
-                            <td>Suspend the system</td>
-                        </tr>
-                        <tr>
-                            <td>hibernate</td>
-                            <td>Hibernate the system</td>
-                        </tr>
-                        <tr>
-                            <td>hybrid-sleep</td>
-                            <td>Hibernate and suspend the system</td>
-                        </tr>
-                    </tbody>
+                    {% endfor %}
                 </table>
             </div>
         </div>

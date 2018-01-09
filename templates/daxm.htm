@@ -8,11 +8,23 @@
         <div class="daxm mdl-card mdl-cell--6-col mdl-shadow--2dp">
              <div class="mdl-card__title">
                  <h2 class="mdl-card__title-text">
-                     TITLE
+                     systemctl -h output
                  </h2>
              </div>
             <div class="mdl-card__actions mdl-card--border">
-                {{ help_output }}
+                <ul>
+                {% for result in help_output %}
+                    <li>
+                    {% if result[0] != '' %}
+                        {{ result[0] }}&nbsp;{{ result[1] }}
+                    {% elif result[1] != '' %}
+                        {{ result[1] }}
+                    {% else %}
+                        {{ result[2] }}
+                    {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
