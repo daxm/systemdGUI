@@ -1,5 +1,11 @@
+from GLOBALS import LOGGING_LEVEL
 import subprocess
 import re
+import os
+import logging
+import textfsm
+
+logging.basicConfig(level=LOGGING_LEVEL)
 
 
 def systemctl_list_unit_files():
@@ -25,7 +31,11 @@ def systemctl_help_output():
     :return help_output"""
 
     result = subprocess.getoutput("systemctl -h")
-    help_output = []
+    textfsm_template = os.path.join(".", "textfsm_templates", "systemctl_h.textfsm")
+    with open(textfsm_template) as template:
+        re_table = textfsm.TextFSM(template)
+
+    help_output = re_table.ParseText(text=result)
 
     """
     I think this list should be formatted like this:
@@ -38,8 +48,8 @@ def systemctl_help_output():
             }
         },
     ]
-    """
     for line in result.splitlines():
         help_output = line
+    """
 
     return help_output

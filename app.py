@@ -1,17 +1,11 @@
 """Flask application for managing systemd based Linux systems."""
 
+from GLOBALS import title, HOST, PORT, FLASK_DEBUG, LOGGING_LEVEL
 from flask import Flask, render_template, request, url_for
 import logging
-
 import helper
 
 app = Flask(__name__)
-title = "systemd GUI"
-HOST = 'localhost'  # String: Flask server IP/DNS.
-PORT = 7890  # Int: Port to run Flask on.
-FLASK_DEBUG = 1  # Int: 0 or 1
-LOGGING_LEVEL = 'DEBUG'
-
 
 @app.route("/")
 def index():
