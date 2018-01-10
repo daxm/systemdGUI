@@ -38,10 +38,13 @@ def systemctl_help_output():
         re_table = textfsm.TextFSM(template)
 
     help_output_raw = re_table.ParseText(text=result)
+    '''
+    # I'd like to contatenate the desciption line(s) into a single line but I lack the skill to do so right now.  :-(
+    # print(help_output_raw)
 
     #textFSM built list of lists but now we need to clean it up and formatted it better.
-    help_output = collections.OrderedDict()
-    section = ''
+    help_output = []
+    section = 'daxm'
     section_template = {'section': '',
                         'options': {
                             'shortcode': '',
@@ -49,25 +52,23 @@ def systemctl_help_output():
                             'command': '',
                             'description': ''}
                         }
-
     for line in help_output_raw:
+        # Are we at a new section?
         if help_output_raw[4] != section:
-            pass
-    pprint.pprint(help_output)
+            section = line[4]
+            new_section = section_template
+            new_section['section'] = section
+        # Add options
+        new_section['options']['shortcode'] = line[0]
+        new_section['options']['longcode'] = line[1]
+        new_section['options']['command'] = line[2]
+        # Check to see if this line is only an extension of the description for the previous help_output
+        if line[0] == '' and line[1] == '' and line[2] == '':
+            new_section['options']['description'] = '{}{}'.format(new_section['options']['description'], line[3])
+        else:
+            new_section['options']['description'] = line[3]
+        print(new_section)
+        help_output.append(new_section)
+    '''
 
-    """
-    I think this list should be formatted like this:
-    help_output = [
-        {'section': '<section name>',
-         'options': {
-             'shortcode': '<-h>',
-             'longcode': '<--help or list-unit-files>',
-             'description': '<blah>'
-            }
-        },
-    ]
-    for line in result.splitlines():
-        help_output = line
-    """
-
-    return help_output
+    return help_output_raw

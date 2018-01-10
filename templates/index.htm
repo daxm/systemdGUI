@@ -20,11 +20,29 @@
                         <tr>
                             <td nowrap="True">
                                 {% if result[0] != '' %}
-                                    {{ result[0] }} or {{ result[1] }}
+                                    {% if result[0] in supported_options %}
+                                        <a href="{{ supported_options[result[0]] }}">{{ result[0] }}</a>
+                                    {% else %}
+                                        {{ result[0] }}
+                                    {% endif %}
+                                or
+                                    {% if result[1] in supported_options %}
+                                        <a href="{{ supported_options[result[1]] }}">{{ result[1] }}</a>
+                                    {% else %}
+                                        {{ result[1] }}
+                                    {% endif %}
                                 {% elif result[1] != '' %}
-                                    {{ result[1] }}
+                                    {% if result[1] in supported_options %}
+                                        <a href="{{ supported_options[result[1]] }}">{{ result[1] }}</a>
+                                    {% else %}
+                                        {{ result[1] }}
+                                    {% endif %}
                                 {% else %}
-                                    {{ result[2] }}
+                                    {% if result[2] in supported_options %}
+                                        <a href="{{ supported_options[result[2]] }}">{{ result[2] }}</a>
+                                    {% else %}
+                                        {{ result[2] }}
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>

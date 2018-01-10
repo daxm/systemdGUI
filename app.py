@@ -10,7 +10,14 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     systemctl_help = helper.systemctl_help_output()
-    return render_template('index.htm', title=title, systemctl_help=systemctl_help)
+    supported_systemctl_options = {
+        'list-unit-files [PATTERN...]': 'systemctl/list-unit-files',
+    }
+
+    return render_template('index.htm',
+                           title=title,
+                           systemctl_help=systemctl_help,
+                           supported_options=supported_systemctl_options)
 
 
 @app.route("/systemctl/list-unit-files")
