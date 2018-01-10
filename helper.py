@@ -4,6 +4,8 @@ import re
 import os
 import logging
 import textfsm
+import pprint
+import collections
 
 logging.basicConfig(level=LOGGING_LEVEL)
 
@@ -35,9 +37,23 @@ def systemctl_help_output():
     with open(textfsm_template) as template:
         re_table = textfsm.TextFSM(template)
 
-    help_output = re_table.ParseText(text=result)
-    # logging.DEBUG(help_output)
-    print(help_output)
+    help_output_raw = re_table.ParseText(text=result)
+
+    #textFSM built list of lists but now we need to clean it up and formatted it better.
+    help_output = collections.OrderedDict()
+    section = ''
+    section_template = {'section': '',
+                        'options': {
+                            'shortcode': '',
+                            'longcode': '',
+                            'command': '',
+                            'description': ''}
+                        }
+
+    for line in help_output_raw:
+        if help_output_raw[4] != section:
+            pass
+    pprint.pprint(help_output)
 
     """
     I think this list should be formatted like this:
