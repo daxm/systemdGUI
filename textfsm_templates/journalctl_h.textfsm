@@ -1,0 +1,14 @@
+# Value section (think headers for columns of data in a spreadsheet)
+Value shortcode (-\S)
+Value longcode (--\S+)
+Value description (.*)
+Value Filldown section (^\S+:)
+
+# State
+Start
+  ^${section}
+  ^\s{2}${shortcode}\s+${longcode}\s{1,}${description} -> Record
+  # Sometimes the description is on a new line (or multiple lines).  Grab it and we will deal with
+  # it in post.
+  ^\s{10,}${description} -> Record
+  ^\s{5}${longcode}(\s)*(${description}) -> Record

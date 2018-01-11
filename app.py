@@ -7,30 +7,27 @@ import helper
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def index():
-    systemctl_help = helper.systemctl_help_output()
-    supported_systemctl_options = {
+    systemctl_supported_options = {
         'list-unit-files [PATTERN...]': 'systemctl/list-unit-files',
     }
+    journalctl_supported_options = {}
 
     return render_template('index.htm',
                            title=title,
-                           systemctl_help=systemctl_help,
-                           supported_options=supported_systemctl_options)
+                           systemctl_help=helper.systemctl_help_output(),
+                           journalctl_help=helper.journalctl_help_output(),
+                           systemctl_supported_options=systemctl_supported_options,
+                           journalctl_supported_options=journalctl_supported_options)
 
 
 @app.route("/systemctl/list-unit-files")
 def _systemctl_list_unit_files():
-    # Get a list of registered Units
-    systemctl_units = helper.systemctl_list_unit_files()
-    return render_template('list_unit_files.htm', title=title, systemd_units=systemctl_units)
-
-
-@app.route("/daxm")
-def _daxm():
-    help_output = helper.systemctl_help_output()
-    return render_template('daxm.htm', title=title, help_output=help_output)
+    return render_template('list_unit_files.htm',
+                           title=title,
+                           systemd_units=helper.systemctl_list_unit_files())
 
 
 @app.route("/<path:path>")
