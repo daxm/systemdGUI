@@ -4,7 +4,6 @@ import re
 import os
 import logging
 import textfsm
-import pprint
 
 logging.basicConfig(level=LOGGING_LEVEL)
 
@@ -45,19 +44,17 @@ def systemctl_help_output():
         for i, line in enumerate(help_output_raw):
             # Is this a line with only a description?
             if line[0] == '' and line[1] == '' and line[2] == '' and line[3] != '':
-                help_output_raw[i - 1][3] = '{}{}'.format(help_output_raw[i - 1][3], line[3])
-                help_output_raw[i][3] = ''
+                # Pretty up the output by adding a space, if needed, when concatenating.
+                if re.search('\S$', help_output_raw[i - 1][3]) and re.search('^\S', line[3]):
+                    formatter = '{} {}'
+                else:
+                    formatter = '{}{}'
+                help_output_raw[i - 1][3] = formatter.format(help_output_raw[i - 1][3], line[3])
+                # Remove now duplicate row
+                del help_output_raw[i]
                 not_done = True
 
-    # Now remove lines with no shortcode, longcode, command, or descriptions
-    help_output = []
-    for line in help_output_raw:
-        if line[0] == '' and line[1] == '' and line[2] == '' and line[3] == '':
-            continue
-        else:
-            help_output.append(line)
-
-    return help_output
+    return help_output_raw
 
 
 def journalctl_help_output():
@@ -79,16 +76,14 @@ def journalctl_help_output():
         for i, line in enumerate(help_output_raw):
             # Is this a line with only a description?
             if line[0] == '' and line[1] == '' and line[2] != '':
-                help_output_raw[i - 1][2] = help_output_raw[i - 1][2] + line[2]
-                help_output_raw[i][2] = ''
+                # Pretty up the output by adding a space, if needed, when concatenating.
+                if re.search('\S$', help_output_raw[i - 1][2]) and re.search('^\S', line[2]):
+                    formatter = '{} {}'
+                else:
+                    formatter = '{}{}'
+                help_output_raw[i - 1][2] = formatter.format(help_output_raw[i - 1][2], line[2])
+                # Remove now duplicate row
+                del help_output_raw[i]
                 not_done = True
 
-    # Now remove lines with no shortcode, longcode, command, or descriptions
-    help_output = []
-    for line in help_output_raw:
-        if line[0] == '' and line[1] == '' and line[2] == '':
-            continue
-        else:
-            help_output.append(line)
-
-    return help_output
+    return help_output_raw
