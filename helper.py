@@ -38,37 +38,24 @@ def systemctl_help_output():
         re_table = textfsm.TextFSM(template)
 
     help_output_raw = re_table.ParseText(text=result)
-    '''
-    # I'd like to contatenate the desciption line(s) into a single line but I lack the skill to do so right now.  :-(
-    # print(help_output_raw)
 
-    #textFSM built list of lists but now we need to clean it up and formatted it better.
+    # Contatenate desciption into a single item instead of being spread across multiple lines.
+    not_done = True
+    while not_done:
+        not_done = False
+        for i, line in enumerate(help_output_raw):
+            # Is this a line with only a description?
+            if line[0] == '' and line[1] == '' and line[2] == '' and line[3] != '':
+                help_output_raw[i - 1][3] = '{}{}'.format(help_output_raw[i - 1][3], line[3])
+                help_output_raw[i][3] = ''
+                not_done = True
+
+    # Now remove lines with no shortcode, longcode, command, or descriptions
     help_output = []
-    section = 'daxm'
-    section_template = {'section': '',
-                        'options': {
-                            'shortcode': '',
-                            'longcode': '',
-                            'command': '',
-                            'description': ''}
-                        }
     for line in help_output_raw:
-        # Are we at a new section?
-        if help_output_raw[4] != section:
-            section = line[4]
-            new_section = section_template
-            new_section['section'] = section
-        # Add options
-        new_section['options']['shortcode'] = line[0]
-        new_section['options']['longcode'] = line[1]
-        new_section['options']['command'] = line[2]
-        # Check to see if this line is only an extension of the description for the previous help_output
-        if line[0] == '' and line[1] == '' and line[2] == '':
-            new_section['options']['description'] = '{}{}'.format(new_section['options']['description'], line[3])
+        if line[0] == '' and line[1] == '' and line[2] == '' and line[3] == '':
+            continue
         else:
-            new_section['options']['description'] = line[3]
-        print(new_section)
-        help_output.append(new_section)
-    '''
+            help_output.append(line)
 
-    return help_output_raw
+    return help_output
